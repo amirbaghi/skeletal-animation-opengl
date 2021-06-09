@@ -7,6 +7,9 @@
 
 class Bone
 {
+    friend class Skeleton;
+
+public:
     Bone(int length, std::string name) : name(name), length(length), parent(nullptr), mi_d(1), mi_p(1), mi_l(1), mi_a(1), t(0), quat(0, 0, 0, 0)
     {
     }
@@ -14,12 +17,12 @@ class Bone
     void rotate(glm::vec3 rotate);
 
     void calculate_mi_d();
-    void calclulate_mi_a();
+    void calculate_mi_a();
     void calculate_bone_endpoints(glm::vec3 &p1, glm::vec3 &p2);
 
-    void transform_forward_kinematics(glm::vec3 vertex);
-    void transform_from_bonespace_animated(glm::vec3 vertex);
-    void transform_from_bonespace_default_pose(glm::vec3 vertex);
+    glm::vec3 transform_forward_kinematics(glm::vec3 vertex);
+    glm::vec3 transform_from_bonespace_animated(glm::vec3 vertex);
+    glm::vec3 transform_from_bonespace_default_pose(glm::vec3 vertex);
 
     inline int getLength() { return this->length; }
     inline std::string getName() { return this->name; }
