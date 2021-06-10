@@ -1,6 +1,7 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <iostream>
+#include <algorithm>
 
 #include "./Headers/Scene.h"
 
@@ -74,37 +75,6 @@ void Scene::setSkin(std::vector<Vertex> skin)
 
 void Scene::inverseKinematic(glm::vec2 pos)
 {
-    auto target = glm::vec3(pos.x, pos.y, 1);
-
-    auto boneNames = skeleton->getBoneNames();
-    for (auto boneName : boneNames)
-    {
-        Bone *bone = this->getBone(boneName);
-
-        glm::vec3 animatedStartPos, animatedEndPos;
-        animatedStartPos = bone->transform_from_bonespace_animated_without_local_transformation(glm::vec3(0, 0, 0));
-        animatedEndPos = bone->transform_from_bonespace_animated_without_local_transformation(glm::vec3(bone->getLength(), 0, 0));
-
-        auto u = glm::length(animatedEndPos - animatedStartPos);
-        auto f = glm::length(target - animatedStartPos);
-        auto g = glm::length(target - animatedEndPos);
-
-        auto alpha = glm::acos((u * u + f * f - g * g) / (2 * u * f));
-
-        auto uvec = animatedEndPos - animatedStartPos;
-        auto fvec = target - animatedStartPos;
-
-        auto crossprod = glm::cross(uvec, fvec);
-
-        if (crossprod.z > 0)
-        {
-            bone->rotate(glm::vec3(0, 0, alpha));
-        }
-        else
-        {
-            bone->rotate(glm::vec3(0, 0, 2 * glm::pi<double>() - alpha));
-        }
-    }
 }
 
 void Scene::init()

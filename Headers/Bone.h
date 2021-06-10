@@ -25,6 +25,8 @@ public:
     glm::vec3 transform_from_bonespace_animated_without_local_transformation(glm::vec3 vertex);
     glm::vec3 transform_from_bonespace_default_pose(glm::vec3 vertex);
 
+    glm::vec3 getTheta();
+
     inline int getLength() { return this->length; }
     inline std::string getName() { return this->name; }
     inline glm::mat4 getLocalTransformation() { return this->mi_l; }
@@ -44,4 +46,5 @@ private:
     // Key data
     glm::vec3 t;
     glm::quat quat;
+    glm::vec3 theta;
 };
