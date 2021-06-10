@@ -79,6 +79,13 @@ void Scene::inverseKinematic(glm::vec2 pos)
 
     Bone *endEffectorBone = this->getBone(this->getCount() - 1);
 
+    glm::vec3 endEffector;
+    endEffector = endEffectorBone->transform_from_bonespace_animated(glm::vec3(endEffectorBone->getLength(), 0, 0));
+    if (glm::length(endEffector - target) < 1.5)
+    {
+        return;
+    }
+
     auto boneNames = skeleton->getBoneNames();
     std::reverse(boneNames.begin(), boneNames.end());
     for (auto boneName : boneNames)

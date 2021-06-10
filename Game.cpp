@@ -24,11 +24,6 @@ void Game::keyCallback(GLFWwindow *window, int key, int scancode, int action, in
     else if (key == GLFW_KEY_F && action == GLFW_PRESS)
     {
         inverse_kinematic = !inverse_kinematic;
-
-        if (inverse_kinematic)
-        {
-            currentIteration = 0;
-        }
     }
 }
 
@@ -41,6 +36,11 @@ void Game::mouseCallback(GLFWwindow *window, int button, int action, int mods)
         is_mouse_pressed = true;
 
         pressed_mouse_pos = glm::vec2(x, y);
+
+        if (inverse_kinematic)
+        {
+            currentIteration = 0;
+        }
     }
     else
     {
@@ -72,7 +72,7 @@ void Game::init()
 
     inverse_kinematic = false;
     currentIteration = 0;
-    maxIteration = 500;
+    maxIteration = 100;
 
     scene = new Scene();
 
