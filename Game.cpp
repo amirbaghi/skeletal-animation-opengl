@@ -6,7 +6,6 @@
 #include <thread>
 #include <cmath>
 
-
 void Game::errorCallback(int error, const char *description)
 {
     fprintf(stderr, "Error: %s\n", description);
@@ -25,6 +24,11 @@ void Game::keyCallback(GLFWwindow *window, int key, int scancode, int action, in
     else if (key == GLFW_KEY_F && action == GLFW_PRESS)
     {
         inverse_kinematic = !inverse_kinematic;
+
+        if (inverse_kinematic)
+        {
+            currentIteration = 0;
+        }
     }
 }
 
@@ -67,6 +71,8 @@ void Game::init()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     inverse_kinematic = false;
+    currentIteration = 0;
+    maxIteration = 500;
 
     scene = new Scene();
 
@@ -125,8 +131,12 @@ void Game::processInput()
     }
     else if (inverse_kinematic)
     {
-        auto pos = viewport2Camera(pressed_mouse_pos);
-        scene->inverseKinematic(pos);
+        if (currentIteration < maxIteration)
+        {
+            auto pos = viewport2Camera(pressed_mouse_pos);
+            scene->inverseKinematic(pos);
+            currentIteration++;
+        }
     }
 
     glfwPollEvents();
@@ -203,7 +213,7 @@ int Game::main(int argc, char **argv)
         double current_time = glfwGetTime();
         double delta = current_time - prev_time;
 
-        if (delta >= 1.0 / 60)
+        if (delta >= 1.0 / 40)
         {
             processInput();
             update();

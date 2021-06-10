@@ -4,7 +4,6 @@
 #include <algorithm>
 
 #include "./Headers/Scene.h"
-#include "gtx/matrix_decompose.hpp"
 
 void Scene::addBone(std::string parent, std::string boneName, int length, float angle)
 {
