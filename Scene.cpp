@@ -76,31 +76,34 @@ void Scene::inverseKinematic(glm::vec2 pos)
 {
     auto target = glm::vec3(pos.x, pos.y, 1);
 
-    int lastBoneIndex = this->getCount() - 1;
-    Bone *endEffectorBone = this->getBone(lastBoneIndex);
-
-    glm::vec3 animatedStartPos, animatedEndPos;
-    animatedStartPos = endEffectorBone->transform_from_bonespace_animated_without_local_transformation(glm::vec3(0, 0, 0));
-    animatedEndPos = endEffectorBone->transform_from_bonespace_animated_without_local_transformation(glm::vec3(endEffectorBone->getLength(), 0, 0));
-
-    auto u = glm::length(animatedEndPos - animatedStartPos);
-    auto f = glm::length(target - animatedStartPos);
-    auto g = glm::length(target - animatedEndPos);
-
-    auto alpha = glm::acos((u * u + f * f - g * g) / (2 * u * f));
-
-    auto uvec = animatedEndPos - animatedStartPos;
-    auto fvec = target - animatedStartPos;
-
-    auto crossprod = glm::cross(uvec, fvec);
-
-    if (crossprod.z > 0)
+    auto boneNames = skeleton->getBoneNames();
+    for (auto boneName : boneNames)
     {
-        endEffectorBone->rotate(glm::vec3(0, 0, alpha));
-    }
-    else
-    {
-        endEffectorBone->rotate(glm::vec3(0, 0, 2 * glm::pi<double>() - alpha));
+        Bone *bone = this->getBone(boneName);
+
+        glm::vec3 animatedStartPos, animatedEndPos;
+        animatedStartPos = bone->transform_from_bonespace_animated_without_local_transformation(glm::vec3(0, 0, 0));
+        animatedEndPos = bone->transform_from_bonespace_animated_without_local_transformation(glm::vec3(bone->getLength(), 0, 0));
+
+        auto u = glm::length(animatedEndPos - animatedStartPos);
+        auto f = glm::length(target - animatedStartPos);
+        auto g = glm::length(target - animatedEndPos);
+
+        auto alpha = glm::acos((u * u + f * f - g * g) / (2 * u * f));
+
+        auto uvec = animatedEndPos - animatedStartPos;
+        auto fvec = target - animatedStartPos;
+
+        auto crossprod = glm::cross(uvec, fvec);
+
+        if (crossprod.z > 0)
+        {
+            bone->rotate(glm::vec3(0, 0, alpha));
+        }
+        else
+        {
+            bone->rotate(glm::vec3(0, 0, 2 * glm::pi<double>() - alpha));
+        }
     }
 }
 
