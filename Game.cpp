@@ -6,6 +6,7 @@
 #include <thread>
 #include <cmath>
 
+
 void Game::errorCallback(int error, const char *description)
 {
     fprintf(stderr, "Error: %s\n", description);
@@ -17,7 +18,7 @@ void Game::keyCallback(GLFWwindow *window, int key, int scancode, int action, in
     {
         glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
-    else if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && action == GLFW_PRESS)
+    else if (key >= GLFW_KEY_1 && key <= GLFW_KEY_6 && action == GLFW_PRESS)
     {
         scene->selectBone(key - GLFW_KEY_1);
     }
@@ -29,7 +30,7 @@ void Game::keyCallback(GLFWwindow *window, int key, int scancode, int action, in
 
 void Game::mouseCallback(GLFWwindow *window, int button, int action, int mods)
 {
-    if (button == GLFW_KEY_LEFT && action == GLFW_PRESS)
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
     {
         double x, y;
         glfwGetCursorPos(window, &x, &y);
@@ -90,7 +91,7 @@ void Game::init()
 
         Bone *previousBone = scene->getBone(previousBoneIndex);
         Bone *bone = scene->getBone(i);
-        Bone *bone = scene->getBone(nextBoneIndex);
+        Bone *nextBone = scene->getBone(nextBoneIndex);
 
         float step = bone->getLength() / segments;
         for (int j = 0; j < segments; j++)
@@ -163,6 +164,8 @@ void Game::render()
     glVertex2f(pos.x, 5 + pos.y);
     glEnd();
 
+    scene->render();
+
     glfwSwapBuffers(window);
 }
 
@@ -215,4 +218,6 @@ int Game::main(int argc, char **argv)
     }
 
     glfwDestroyWindow(window);
+
+    return 0;
 }

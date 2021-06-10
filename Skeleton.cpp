@@ -9,6 +9,7 @@ void Skeleton::addBone(Bone *parent, Bone *bone, glm::vec3 translation, glm::vec
     else
     {
         parent->children.push_back(bone);
+        bone->parent = parent;
 
         bone->mi_p = glm::identity<glm::mat4>();
         bone->mi_p = glm::translate(bone->mi_p, glm::vec3(parent->length, 0, 0));

@@ -13,14 +13,14 @@
 
 namespace Game
 {
-    Scene *scene;
-    GLFWwindow *window;
+    static Scene *scene;
+    static GLFWwindow *window;
 
-    glm::vec2 pressed_mouse_pos;
-    glm::vec2 current_mouse_pos;
-    bool is_mouse_pressed;
+    static glm::vec2 pressed_mouse_pos;
+    static glm::vec2 current_mouse_pos;
+    static bool is_mouse_pressed;
 
-    bool inverse_kinematic;
+    static bool inverse_kinematic;
 
     static void errorCallback(int error, const char *description);
     static void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
