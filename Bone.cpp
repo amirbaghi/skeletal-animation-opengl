@@ -75,3 +75,9 @@ glm::vec3 Bone::transform_from_bonespace_default_pose(glm::vec3 vertex)
     glm::vec4 v = this->mi_d * glm::vec4(vertex, 1);
     return glm::vec3(v.x / v.w, v.y / v.w, v.z / v.w);
 }
+
+glm::vec3 Bone::transform_from_bonespace_animated_without_local_transformation(glm::vec3 vertex)
+{
+    glm::vec4 v = this->parent->mi_a * this->mi_p * glm::vec4(vertex, 1);
+    return glm::vec3(v.x / v.w, v.y / v.w, v.z / v.w);
+}

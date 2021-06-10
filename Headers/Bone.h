@@ -22,6 +22,7 @@ public:
 
     glm::vec3 transform_forward_kinematics(glm::vec3 vertex);
     glm::vec3 transform_from_bonespace_animated(glm::vec3 vertex);
+    glm::vec3 transform_from_bonespace_animated_without_local_transformation(glm::vec3 vertex);
     glm::vec3 transform_from_bonespace_default_pose(glm::vec3 vertex);
 
     inline int getLength() { return this->length; }

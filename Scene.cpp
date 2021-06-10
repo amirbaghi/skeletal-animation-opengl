@@ -1,5 +1,6 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
+#include <iostream>
 
 #include "./Headers/Scene.h"
 
@@ -42,7 +43,14 @@ void Scene::selectBone(int boneIndex)
     auto bone = this->getBone(boneIndex);
     if (bone != nullptr)
     {
-        this->selectedBone = bone;
+        if (this->selectedBone == bone)
+        {
+            this->selectedBone = nullptr;
+        }
+        else
+        {
+            this->selectedBone = bone;
+        }
     }
 }
 
@@ -66,7 +74,34 @@ void Scene::setSkin(std::vector<Vertex> skin)
 
 void Scene::inverseKinematic(glm::vec2 pos)
 {
-    // TODO
+    auto target = glm::vec3(pos.x, pos.y, 1);
+
+    int lastBoneIndex = this->getCount() - 1;
+    Bone *endEffectorBone = this->getBone(lastBoneIndex);
+
+    glm::vec3 animatedStartPos, animatedEndPos;
+    animatedStartPos = endEffectorBone->transform_from_bonespace_animated_without_local_transformation(glm::vec3(0, 0, 0));
+    animatedEndPos = endEffectorBone->transform_from_bonespace_animated_without_local_transformation(glm::vec3(endEffectorBone->getLength(), 0, 0));
+
+    auto u = glm::length(animatedEndPos - animatedStartPos);
+    auto f = glm::length(target - animatedStartPos);
+    auto g = glm::length(target - animatedEndPos);
+
+    auto alpha = glm::acos((u * u + f * f - g * g) / (2 * u * f));
+
+    auto uvec = animatedEndPos - animatedStartPos;
+    auto fvec = target - animatedStartPos;
+
+    auto crossprod = glm::cross(uvec, fvec);
+
+    if (crossprod.z > 0)
+    {
+        endEffectorBone->rotate(glm::vec3(0, 0, alpha));
+    }
+    else
+    {
+        endEffectorBone->rotate(glm::vec3(0, 0, 2 * glm::pi<double>() - alpha));
+    }
 }
 
 void Scene::init()
