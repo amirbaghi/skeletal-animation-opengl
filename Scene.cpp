@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include "./Headers/Scene.h"
+#include "gtx/matrix_decompose.hpp"
 
 void Scene::addBone(std::string parent, std::string boneName, int length, float angle)
 {
@@ -75,6 +76,59 @@ void Scene::setSkin(std::vector<Vertex> skin)
 
 void Scene::inverseKinematic(glm::vec2 pos)
 {
+    auto target = glm::vec3(pos.x, pos.y, 1);
+
+    Bone *endEffectorBone = this->getBone(this->getCount() - 1);
+
+    auto boneNames = skeleton->getBoneNames();
+    std::reverse(boneNames.begin(), boneNames.end());
+    for (auto boneName : boneNames)
+    {
+        Bone *bone = this->getBone(boneName);
+        glm::vec3 animatedStartPos, animatedEndEffector;
+        animatedStartPos = bone->transform_from_bonespace_animated(glm::vec3(0, 0, 0));
+        animatedEndEffector = endEffectorBone->transform_from_bonespace_animated(glm::vec3(endEffectorBone->getLength(), 0, 0));
+
+        auto u = glm::length(animatedEndEffector - animatedStartPos);
+        auto f = glm::length(target - animatedStartPos);
+        auto g = glm::length(target - animatedEndEffector);
+
+        auto alpha = glm::acos((u * u + f * f - g * g) / (2 * u * f));
+
+        auto prev_theta = bone->getTheta();
+
+        auto v1 = animatedEndEffector - animatedStartPos;
+        auto v2 = target - animatedStartPos;
+
+        auto crossprod = glm::cross(v1, v2);
+
+        if (alpha < 0.01)
+        {
+            break;
+        }
+
+        if (crossprod.z > 0)
+        {
+            alpha += prev_theta.z;
+
+            if (alpha > 2 * glm::pi<double>())
+            {
+                alpha -= 2 * glm::pi<double>();
+            }
+        }
+        else
+        {
+            alpha = prev_theta.z - alpha;
+            if (alpha < 0)
+            {
+                alpha += 2 * glm::pi<double>();
+            }
+        }
+
+        bone->rotate(glm::vec3(0, 0, alpha));
+
+        bone->calculate_mi_a();
+    }
 }
 
 void Scene::init()

@@ -10,7 +10,7 @@ class Bone
     friend class Skeleton;
 
 public:
-    Bone(int length, std::string name) : name(name), length(length), parent(nullptr), mi_d(1), mi_p(1), mi_l(1), mi_a(1), t(0), quat(0, 0, 0, 0)
+    Bone(int length, std::string name) : name(name), length(length), parent(nullptr), mi_d(1), mi_p(1), mi_l(1), mi_a(1), t(0), quat(0, 0, 0, 0), theta(0, 0, 0)
     {
     }
 
@@ -30,10 +30,10 @@ public:
     inline int getLength() { return this->length; }
     inline std::string getName() { return this->name; }
     inline glm::mat4 getLocalTransformation() { return this->mi_l; }
-
-private:
     Bone *parent;
     std::vector<Bone *> children;
+
+private:
 
     std::string name;
     int length;

@@ -203,7 +203,7 @@ int Game::main(int argc, char **argv)
         double current_time = glfwGetTime();
         double delta = current_time - prev_time;
 
-        if (delta >= 1.0 / 10)
+        if (delta >= 1.0 / 60)
         {
             processInput();
             update();
