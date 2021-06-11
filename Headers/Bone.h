@@ -30,10 +30,10 @@ public:
     inline int getLength() { return this->length; }
     inline std::string getName() { return this->name; }
     inline glm::mat4 getLocalTransformation() { return this->mi_l; }
-    Bone *parent;
-    std::vector<Bone *> children;
 
 private:
+    Bone *parent;
+    std::vector<Bone *> children;
 
     std::string name;
     int length;
