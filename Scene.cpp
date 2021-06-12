@@ -228,7 +228,7 @@ void Scene::render()
     glVertex2f(0.0, -20.0);
     glEnd();
 
-    glColor3f(0.0, 1.0, 0.0);
+    glColor3f(246.0 / 255.0, 80.0 / 255.0, 88.0 / 255.0);
     auto boneNames = this->skeleton->getBoneNames();
     for (auto boneName : boneNames)
     {
@@ -256,7 +256,7 @@ void Scene::render()
         glLineWidth(1.0);
     }
 
-    glColor3f(0.0, 0.0, 1.0);
+    glColor3f(251.0 / 255.0, 222.0 / 255.0, 68.0 / 255.0);
     glBegin(GL_POINTS);
     for (auto vert : this->skin)
     {

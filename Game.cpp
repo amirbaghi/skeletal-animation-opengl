@@ -84,7 +84,7 @@ glm::vec2 Game::viewport2Camera(glm::vec2 position)
 
 void Game::init()
 {
-    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClearColor(40.0 / 255.0, 51.0 / 255.0, 74.0 / 255.0, 1.0);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
