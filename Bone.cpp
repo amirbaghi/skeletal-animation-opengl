@@ -1,4 +1,5 @@
 #include "./Headers/Bone.h"
+#include "gtx/quaternion.hpp"
 
 void Bone::rotate(glm::vec3 theta)
 {
@@ -11,9 +12,26 @@ void Bone::rotate(glm::vec3 theta)
     this->theta = theta;
 }
 
+void Bone::rotate(glm::quat quat)
+{
+
+    // glm::quat q = glm::quat(glm::vec3(0, 0, glm::eulerAngles(quat).z));
+    glm::mat4 rot = glm::toMat4(quat);
+
+    this->mi_l = rot;
+
+    this->theta = glm::eulerAngles(quat);
+    this->quat = quat;
+}
+
 glm::vec3 Bone::getTheta()
 {
     return this->theta;
+}
+
+glm::quat Bone::getQuat()
+{
+    return this->quat;
 }
 
 void Bone::calculate_mi_d()

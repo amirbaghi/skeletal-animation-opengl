@@ -25,6 +25,25 @@ void Game::keyCallback(GLFWwindow *window, int key, int scancode, int action, in
     {
         inverse_kinematic = !inverse_kinematic;
     }
+    else if (key == GLFW_KEY_P && action == GLFW_PRESS)
+    {
+        if (scene->isAnimationPlaying())
+        {
+            scene->stopAnimation();
+        }
+        else
+        {
+            scene->playAnimation();
+        }
+    }
+    else if (key == GLFW_KEY_C && action == GLFW_PRESS)
+    {
+        should_clear_animation = true;
+    }
+    else if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+    {
+        should_add_keyframe = true;
+    }
 }
 
 void Game::mouseCallback(GLFWwindow *window, int button, int action, int mods)
@@ -74,6 +93,12 @@ void Game::init()
     currentIteration = 0;
     maxIteration = 100;
 
+    should_play_animation = false;
+    should_clear_animation = false;
+    should_add_keyframe = false;
+
+    frameRate = 40;
+
     scene = new Scene();
 
     scene->addBone("", "Bone 1", 15, 0);
@@ -82,6 +107,8 @@ void Game::init()
     scene->addBone("Bone 3", "Bone 4", 15, 0);
     scene->addBone("Bone 4", "Bone 5", 15, 0);
     scene->addBone("Bone 5", "Bone 6", 15, 0);
+
+    scene->createNewAnimation(frameRate * 5);
 
     scene->init();
 
@@ -137,6 +164,16 @@ void Game::processInput()
             scene->inverseKinematic(pos);
             currentIteration++;
         }
+    }
+    if (should_add_keyframe && !should_play_animation)
+    {
+        scene->addKeyframe();
+        should_add_keyframe = false;
+    }
+    if (should_clear_animation)
+    {
+        scene->createNewAnimation(frameRate * 5);
+        should_clear_animation = false;
     }
 
     glfwPollEvents();

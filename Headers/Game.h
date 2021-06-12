@@ -24,6 +24,12 @@ namespace Game
     static int currentIteration;
     static int maxIteration;
 
+    static bool should_play_animation;
+    static bool should_clear_animation;
+    static bool should_add_keyframe;
+
+    static int frameRate;
+
     static void errorCallback(int error, const char *description);
     static void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
     static void mouseCallback(GLFWwindow *window, int button, int action, int mods);

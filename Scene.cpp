@@ -137,6 +137,48 @@ void Scene::inverseKinematic(glm::vec2 pos)
     }
 }
 
+void Scene::createNewAnimation(int inBetweenFrameCounts)
+{
+    if (this->animation != nullptr)
+    {
+        delete this->animation;
+    }
+
+    this->animation = new Animation(this->skeleton, inBetweenFrameCounts);
+}
+
+void Scene::addKeyframe()
+{
+    int kfNumber = this->animation->getKeyframeCount();
+    Keyframe *kf = new Keyframe(kfNumber);
+
+    auto boneNames = this->skeleton->getBoneNames();
+    for (auto boneName : boneNames)
+    {
+        Bone *bone = this->skeleton->getBone(boneName);
+
+        kf->addOrientation(boneName, bone->getQuat());
+    }
+
+    this->animation->addKeyframe(kf);
+}
+
+void Scene::playAnimation()
+{
+    if (this->animation->getKeyframeCount() > 1)
+        this->animation->setShouldPlay(true);
+}
+
+void Scene::stopAnimation()
+{
+    this->animation->setShouldPlay(false);
+}
+
+bool Scene::isAnimationPlaying()
+{
+    return this->animation->getShouldPlay();
+}
+
 void Scene::init()
 {
     this->skeleton->calculate_mi_d();
@@ -144,6 +186,21 @@ void Scene::init()
 
 void Scene::update()
 {
+    if (this->animation->getShouldPlay())
+    {
+        std::map<std::string, glm::quat> orientations = this->animation->getCurrentFrameOrientations();
+
+        auto boneNames = this->skeleton->getBoneNames();
+        for (auto boneName : boneNames)
+        {
+            Bone *bone = this->skeleton->getBone(boneName);
+
+            glm::quat orientation = orientations[boneName];
+
+            bone->rotate(orientation);
+        }
+    }
+
     this->skeleton->calculate_mi_a();
 
     for (Vertex &vert : this->skin)

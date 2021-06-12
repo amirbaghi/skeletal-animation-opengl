@@ -2,14 +2,21 @@
 
 #include "Skeleton.h"
 #include "Vertex.h"
+#include "Animation.h"
 
 class Scene
 {
 public:
-    Scene() : selectedBone(nullptr)
+    Scene() : selectedBone(nullptr), animation(nullptr)
     {
         this->skeleton = new Skeleton();
     }
+
+    void createNewAnimation(int inBetweenFrameCounts);
+    void addKeyframe();
+    void playAnimation();
+    void stopAnimation();
+    bool isAnimationPlaying();
 
     void addBone(std::string parent, std::string boneName, int length, float angle);
     Bone *getBone(std::string boneName);
@@ -33,4 +40,5 @@ private:
     std::vector<Vertex> skin;
     Skeleton *skeleton;
     Bone *selectedBone;
+    Animation *animation;
 };

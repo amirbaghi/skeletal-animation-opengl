@@ -15,6 +15,7 @@ public:
     }
 
     void rotate(glm::vec3 rotate);
+    void rotate(glm::quat quat);
 
     void calculate_mi_d();
     void calculate_mi_a();
@@ -26,6 +27,7 @@ public:
     glm::vec3 transform_from_bonespace_default_pose(glm::vec3 vertex);
 
     glm::vec3 getTheta();
+    glm::quat getQuat();
 
     inline int getLength() { return this->length; }
     inline std::string getName() { return this->name; }
