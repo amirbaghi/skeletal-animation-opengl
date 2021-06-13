@@ -27,6 +27,7 @@ void Game::keyCallback(GLFWwindow *window, int key, int scancode, int action, in
     }
     else if (key == GLFW_KEY_P && action == GLFW_PRESS)
     {
+        inverse_kinematic = false;
         if (scene->isAnimationPlaying())
         {
             scene->stopAnimation();
